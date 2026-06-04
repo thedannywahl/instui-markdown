@@ -56,10 +56,20 @@ export function createSpanComponent(options: SpanComponentOptions) {
               ? normalizeColorForSwatch(resolvedColor)
               : undefined;
 
+          // wrapCustomIcon-based components (displayName "InstUIIcon_*") have no
+          // default size and collapse to zero dimensions without an explicit size prop.
+          // SVGIcon-based components default to 1em×1em so they don't need this.
+          const isCustomIcon = (IconComponent as { displayName?: string }).displayName?.startsWith(
+            "InstUIIcon_",
+          );
+          const sizeProps = isCustomIcon
+            ? ({ size: "x-small" } as Pick<InstUIIconProps, "size">)
+            : {};
+
           if (normalizedIconColor) {
             return (
               <span style={{ color: normalizedIconColor }}>
-                <IconComponent title={iconName} color="inherit" />
+                <IconComponent title={iconName} color="inherit" {...sizeProps} />
               </span>
             );
           }
@@ -70,6 +80,7 @@ export function createSpanComponent(options: SpanComponentOptions) {
             <IconComponent
               title={iconName}
               color={(iconTokenColor ?? "inherit") as InstUIIconProps["color"]}
+              {...sizeProps}
             />
           );
         }

@@ -1,0 +1,29 @@
+packages:
+  - apps/*
+  - packages/*
+  - tools/*
+
+catalogMode: prefer
+
+catalog:
+  "@types/node": ^24
+  typescript: ^5
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
+  vite-plus: latest
+  "@vitejs/plugin-react": ^6.0.2
+  "@instructure/emotion": ^11.7.3
+  "@instructure/ui-buttons": ^11.7.3
+  "@instructure/ui-themes": ^11.7.3
+overrides:
+  vite: "catalog:"
+  vitest: "catalog:"
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: "*"
+    vitest: "*"
+allowBuilds:
+  core-js: true

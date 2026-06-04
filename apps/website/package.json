@@ -1,0 +1,52 @@
+{
+  "name": "website",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "tsc && vp build",
+    "preview": "vp preview"
+  },
+  "dependencies": {
+    "@instructure/emotion": "*",
+    "@instructure/ui-alerts": "*",
+    "@instructure/ui-badge": "*",
+    "@instructure/ui-buttons": "*",
+    "@instructure/ui-checkbox": "*",
+    "@instructure/ui-color-utils": "*",
+    "@instructure/ui-flex": "*",
+    "@instructure/ui-heading": "*",
+    "@instructure/ui-icons": "*",
+    "@instructure/ui-img": "*",
+    "@instructure/ui-link": "*",
+    "@instructure/ui-list": "*",
+    "@instructure/ui-simple-select": "*",
+    "@instructure/ui-source-code-editor": "*",
+    "@instructure/ui-svg-images": "*",
+    "@instructure/ui-table": "*",
+    "@instructure/ui-text": "*",
+    "@instructure/ui-text-input": "*",
+    "@instructure/ui-themes": "catalog:",
+    "@instructure/ui-tray": "*",
+    "@instructure/ui-view": "*",
+    "@mdx-js/react": "*",
+    "core-js": "*",
+    "instui-markdown": "workspace:*",
+    "react": "*",
+    "react-dom": "*",
+    "react-markdown": "*",
+    "rehype-autolink-headings": "*",
+    "rehype-raw": "*",
+    "rehype-slug": "*",
+    "remark-gfm": "*"
+  },
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@vitejs/plugin-react": "*",
+    "typescript": "~6.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

@@ -27,8 +27,8 @@ The background is #1f2937 and the border is rgba(14, 165, 233, 0.6).
 Output (simplified):
 
 ```html
-The background is <span class="color-code" data-color="#1f2937">#1f2937</span>
-and the border is <span class="color-code" data-color="rgba(14, 165, 233, 0.6)">rgba(14, 165, 233, 0.6)</span>.
+The background is <span class="color-code" data-color="#1f2937">#1f2937</span> and the border is
+<span class="color-code" data-color="rgba(14, 165, 233, 0.6)">rgba(14, 165, 233, 0.6)</span>.
 ```
 
 ---
@@ -57,8 +57,9 @@ Save your work :IconSaveLine: or discard :IconTrashLine|#E00:.
 Output (simplified):
 
 ```html
-Save your work <span class="icon-token" data-icon="IconSaveLine">:IconSaveLine:</span>
-or discard <span class="icon-token" data-icon="IconTrashLine" data-icon-color="#E00">:IconTrashLine|#E00:</span>.
+Save your work <span class="icon-token" data-icon="IconSaveLine">:IconSaveLine:</span> or discard
+<span class="icon-token" data-icon="IconTrashLine" data-icon-color="#E00">:IconTrashLine|#E00:</span
+>.
 ```
 
 ---

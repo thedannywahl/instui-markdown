@@ -17,9 +17,11 @@ import DEFAULT_MD from "./default.md?raw";
 
 type AppProps = {
   instuiTheme: DarkTheme | LightTheme;
+  resolvedTheme: "light" | "dark";
+  onToggleTheme: () => void;
 };
 
-export function App({ instuiTheme }: AppProps) {
+export function App({ instuiTheme, resolvedTheme, onToggleTheme }: AppProps) {
   const [md, setMd] = useState(DEFAULT_MD);
   const [isOptionsTrayOpen, setIsOptionsTrayOpen] = useState(false);
   const semantics = instuiTheme.newTheme.semantics(instuiTheme.newTheme.primitives);
@@ -79,9 +81,18 @@ export function App({ instuiTheme }: AppProps) {
             </Flex.Item>
             <Flex.Item>
               <View as="div" margin="small 0 medium">
-                <Button color="secondary" onClick={() => setIsOptionsTrayOpen(true)}>
-                  Open render options
-                </Button>
+                <Flex gap="small">
+                  <Flex.Item>
+                    <Button color="secondary" onClick={() => setIsOptionsTrayOpen(true)}>
+                      Open render options
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button color="secondary" onClick={onToggleTheme}>
+                      {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+                    </Button>
+                  </Flex.Item>
+                </Flex>
               </View>
             </Flex.Item>
           </Flex>

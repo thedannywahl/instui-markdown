@@ -36,7 +36,11 @@ function AppBootstrap() {
 
   return (
     <InstUISettingsProvider theme={instuiTheme}>
-      <App instuiTheme={instuiTheme} />
+      <App
+        instuiTheme={instuiTheme}
+        resolvedTheme={resolvedTheme}
+        onToggleTheme={() => setResolvedTheme((t) => (t === "dark" ? "light" : "dark"))}
+      />
     </InstUISettingsProvider>
   );
 }

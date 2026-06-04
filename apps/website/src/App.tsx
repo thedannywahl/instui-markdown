@@ -73,7 +73,8 @@ export function App({ instuiTheme }: AppProps) {
               <Text>
                 Render plain markdown with{" "}
                 <Link href="https://instructure.design">InstUI components</Link>. Several
-                configurable options are available.
+                configurable options are available.{" "}
+                <Link href="https://github.com/thedannywahl/instui-markdown">View on GitHub</Link>.
               </Text>
             </Flex.Item>
             <Flex.Item>

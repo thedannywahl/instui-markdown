@@ -1,6 +1,6 @@
 {
   "name": "rehype-instui-markdown",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Rehype plugins for InstUI markdown rendering",
   "license": "MIT",
   "files": [

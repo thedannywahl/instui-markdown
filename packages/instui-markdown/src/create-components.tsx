@@ -58,12 +58,20 @@ export function createInstuiMarkdownComponents(
   const showColorCodes = Boolean(renderOptions.color?.enabled);
   const showIcons = Boolean(renderOptions.icons?.enabled);
   const iconColor = renderOptions.icons?.color;
+  const enableInstuiIcons = renderOptions.icons?.providers?.instui ?? true;
+  const enableSimpleIcons = renderOptions.icons?.providers?.simpleIcons ?? true;
+  const simpleIconColor = renderOptions.icons?.simpleIcons?.color;
+  const resolveSimpleIcon = renderOptions.icons?.simpleIcons?.resolve;
 
   return {
     span: createSpanComponent({
       showColorCodes,
       showIcons,
       iconColor,
+      enableInstuiIcons,
+      enableSimpleIcons,
+      simpleIconColor,
+      resolveSimpleIcon,
     }) as any,
     a: createLinkComponent({
       showExternalIcon,

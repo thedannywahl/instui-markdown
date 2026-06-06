@@ -55,7 +55,40 @@ export interface InstuiMarkdownRenderOptions {
     enabled?: boolean;
     /** Default icon color for rendered icon tokens. */
     color?: string;
+    /** Per-provider icon source controls. */
+    providers?: {
+      /** Enables lookup against @instructure/ui-icons. */
+      instui?: boolean;
+      /** Enables fallback lookup against configured simple icon resolver. */
+      simpleIcons?: boolean;
+    };
+    /** Options for resolving non-InstUI icon codes to inline SVG output. */
+    simpleIcons?: {
+      /** Default color for simple icon output. Falls back to icons.color. */
+      color?: string;
+      /**
+       * Resolves a token code into SVG path data rendered by InlineSVG.
+       * Return undefined when no match exists.
+       */
+      resolve?: (code: string) => SimpleIconTokenData | undefined;
+    };
   };
+}
+
+/**
+ * Minimal shape needed to render a simple icon with InlineSVG.
+ */
+export interface SimpleIconTokenData {
+  /** SVG path data for the icon. */
+  path: string;
+  /** Optional human-friendly icon title used for accessibility. */
+  title?: string;
+  /** Optional SVG viewBox. Defaults to "0 0 24 24". */
+  viewBox?: string;
+  /** Optional explicit width. Defaults to 1em. */
+  width?: string | number;
+  /** Optional explicit height. Defaults to 1em. */
+  height?: string | number;
 }
 
 /**

@@ -35,7 +35,9 @@ The background is <span class="color-code" data-color="#1f2937">#1f2937</span> a
 
 ### `rehypeInstUIIconTokens`
 
-Wraps `:iconName:` and `:iconName|color:` tokens in `<span class="icon-token" data-icon="…">` elements so a downstream renderer can swap them for real icon components. Skips any content inside `<pre>` or `<code>` blocks.
+Wraps `:iconName:` and `:iconName|color:` tokens in `<span class="icon-token" data-icon="…">` elements so a downstream renderer can swap them for icons. Skips any content inside `<pre>` or `<code>` blocks.
+
+This plugin is provider-agnostic: it does not decide whether a token maps to InstUI, SimpleIcons, or another icon source. Provider selection and fallback behavior are handled by the consuming renderer.
 
 ```ts
 import { rehypeInstUIIconTokens } from "rehype-instui-markdown";

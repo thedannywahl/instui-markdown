@@ -1,4 +1,6 @@
 import { expect, test } from "vite-plus/test";
+import { InlineSVG } from "@instructure/ui-svg-images";
+import { createSpanComponent } from "../src/components/span-component.tsx";
 import {
   InstuiMarkdown,
   InstuiMdxProvider,
@@ -58,4 +60,120 @@ test("table helper functions compare and normalize text", () => {
   expect(compareTableCellValues("2", "10")).toBeLessThan(0);
   expect(compareTableCellValues("beta", "Alpha")).toBeGreaterThan(0);
   expect(textFromNode(["A", 2, ["B"]])).toBe("A2B");
+});
+
+test("span icon renderer resolves simple icons through InlineSVG fallback", () => {
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: false,
+    enableSimpleIcons: true,
+    simpleIconColor: "#333",
+    resolveSimpleIcon: (code) =>
+      code.toLowerCase() === "github" ? { path: "M1 1h22v22H1z", title: "GitHub" } : undefined,
+  });
+
+  const rendered = Span({
+    className: "icon-token",
+    children: ":Github:",
+    "data-icon": "Github",
+  }) as { type: unknown; props: Record<string, unknown> };
+
+  expect(rendered.type).toBe("span");
+  const inlineSvg = rendered.props.children as { type: unknown; props: Record<string, unknown> };
+  expect(inlineSvg.type).toBe(InlineSVG);
+  expect(inlineSvg.props["aria-label"]).toBe("GitHub");
+});
+
+test("span icon renderer leaves unknown token text unchanged", () => {
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: false,
+    enableSimpleIcons: true,
+    simpleIconColor: undefined,
+    resolveSimpleIcon: () => undefined,
+  });
+
+  const rendered = Span({
+    className: "icon-token",
+    children: ":NotFound:",
+    "data-icon": "NotFound",
+  }) as { props: Record<string, unknown> };
+
+  expect(rendered.props.children).toBe(":NotFound:");
+});
+
+test("span icon renderer does not call simple resolver when provider is disabled", () => {
+  let calls = 0;
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: false,
+    enableSimpleIcons: false,
+    simpleIconColor: undefined,
+    resolveSimpleIcon: () => {
+      calls += 1;
+      return { path: "M0 0", title: "Never" };
+    },
+  });
+
+  const rendered = Span({
+    className: "icon-token",
+    children: ":Never:",
+    "data-icon": "Never",
+  }) as { props: Record<string, unknown> };
+
+  expect(calls).toBe(0);
+  expect(rendered.props.children).toBe(":Never:");
+});
+
+test("span icon renderer prefers token color over simple icon defaults", () => {
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: "#00ff00",
+    enableInstuiIcons: false,
+    enableSimpleIcons: true,
+    simpleIconColor: "#0000ff",
+    resolveSimpleIcon: () => ({ path: "M1 1h22v22H1z", title: "Color" }),
+  });
+
+  const rendered = Span({
+    className: "icon-token",
+    children: ":Color:",
+    "data-icon": "Color",
+    "data-icon-color": "#ff0000",
+  }) as { props: Record<string, unknown> };
+
+  const style = rendered.props.style as { color?: string } | undefined;
+  expect(style?.color?.toLowerCase()).toContain("ff0000");
+});
+
+test("span icon renderer resolves InstUI icons case-insensitively", () => {
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: true,
+    enableSimpleIcons: false,
+    simpleIconColor: undefined,
+  });
+
+  const uppercaseResult = Span({
+    className: "icon-token",
+    children: ":Search:",
+    "data-icon": "Search",
+  });
+
+  const lowercaseResult = Span({
+    className: "icon-token",
+    children: ":search:",
+    "data-icon": "search",
+  });
+
+  expect(uppercaseResult.type).toBe(lowercaseResult.type);
 });

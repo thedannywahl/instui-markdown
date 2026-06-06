@@ -120,16 +120,49 @@ Wraps color literals in a visual swatch. Supports `#hex`, `rgb()`, `rgba()`, `hs
 
 ### `icons`
 
-Renders InstUI icons from `:iconName:` tokens. Supports Line, Solid, and Lucide icon variants. You can omit the `Icon` prefix and the `Line`/`Solid` suffix — `:Heart:`, `:HeartLine:`, and `:IconHeartLine:` all resolve to the same icon.
+Renders icon tokens from `:iconName:` syntax. InstUI lookup runs first, then optional SimpleIcons lookup can run as a fallback through an app-provided resolver. You can omit the `Icon` prefix and the `Line`/`Solid` suffix for InstUI names, so `:Heart:`, `:HeartLine:`, and `:IconHeartLine:` all resolve to the same InstUI icon.
 
 Add an optional hex color with a pipe: `:Heart|#F00:`.
 
 Skips icon tokens inside code fences.
 
-| Option    | Type      | Default     | Description                                  |
-| --------- | --------- | ----------- | -------------------------------------------- |
-| `enabled` | `boolean` | `false`     | Renders `:icon:` tokens as InstUI icons      |
-| `color`   | `string`  | `undefined` | Default icon color (hex) for all icon tokens |
+| Option                  | Type                                    | Default     | Description                                                        |
+| ----------------------- | --------------------------------------- | ----------- | ------------------------------------------------------------------ |
+| `enabled`               | `boolean`                               | `false`     | Enables token-based icon rendering                                 |
+| `color`                 | `string`                                | `undefined` | Default color for all icon providers                               |
+| `providers.instui`      | `boolean`                               | `true`      | Enables InstUI lookup (`@instructure/ui-icons`)                    |
+| `providers.simpleIcons` | `boolean`                               | `true`      | Enables SimpleIcons fallback lookup                                |
+| `simpleIcons.color`     | `string`                                | `undefined` | Default color for SimpleIcons output (falls back to `icons.color`) |
+| `simpleIcons.resolve`   | `(code: string) => SimpleIconTokenData` | `undefined` | App-provided resolver for SimpleIcons SVG path data                |
+
+Example with SimpleIcons fallback:
+
+```tsx
+<InstuiMarkdown
+  renderOptions={{
+    icons: {
+      enabled: true,
+      providers: { instui: true, simpleIcons: true },
+      simpleIcons: {
+        resolve: (code) => {
+          if (code.toLowerCase() === "github") {
+            return {
+              title: "GitHub",
+              path: "M12 0C5.37 0 0 5.37 0 12...",
+              viewBox: "0 0 24 24",
+            };
+          }
+          return undefined;
+        },
+      },
+    },
+  }}
+>
+  {":GitHub: and :HeartLine:"}
+</InstuiMarkdown>
+```
+
+If no enabled provider can resolve a token, the original token text is left in place.
 
 ## Peer dependencies
 

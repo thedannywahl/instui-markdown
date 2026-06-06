@@ -6,9 +6,9 @@ All INSTUI icons are available through a custom rehype plugin
 
 `:<iconName>[|<hexcode>]:`
 
-Only the Icon name is needed, but an optional hex code can be provided for custom colors. Line, Solid, and Lucide icons are available.
+Only the Icon name (case insensitive) is needed, but an optional hex code can be provided for custom colors. Line, Solid, and Lucide icons are available.
 
-- `:IconHeartLine:`, `:HeartLine:`, `:Heart:` :ArrowBigRight: :Heart:
+- `:IconHeartLine:`, `:HeartLine:`, `:Heart:`, `:heart:` :ArrowBigRight: :Heart:
 - `:IconHeartSolid:`, `:HeartSolid:` :ArrowBigRight: :HeartSolid:
 - `:CreativeCommonsInstUIIcon:`, `:CreativeCommons:` :ArrowBigRight: :CreativeCommons:
 
@@ -23,6 +23,11 @@ Add a hex color code after the Icon name to see it in any color
 - `:Heart|#00F:`
 - `:Heart|#4B0082:`
 - `:Heart|#7F00FF:`
+
+[Simple Icons](https://simpleicons.org) are also available and follow the same pattern. When icons have the same name between INSTUI and Simple Icons, the INSTUI icon will be displayed.
+
+- `:Claude|#D97757:`
+- `:mcdonalds|#FBC817:`
 
 ## Color literals
 

@@ -4,8 +4,10 @@ import { createSpanComponent } from "../src/components/span-component.tsx";
 import {
   InstuiMarkdown,
   InstuiMdxProvider,
+  createSimpleIconsResolver,
   createInstuiMarkdownComponents,
   instuiMarkdownComponents,
+  resolveSimpleIconToken,
 } from "../src/index.ts";
 import {
   compareTableCellValues,
@@ -84,6 +86,7 @@ test("span icon renderer resolves simple icons through InlineSVG fallback", () =
   const inlineSvg = rendered.props.children as { type: unknown; props: Record<string, unknown> };
   expect(inlineSvg.type).toBe(InlineSVG);
   expect(inlineSvg.props["aria-label"]).toBe("GitHub");
+  expect(inlineSvg.props.inline).toBe(true);
 });
 
 test("span icon renderer leaves unknown token text unchanged", () => {
@@ -176,4 +179,103 @@ test("span icon renderer resolves InstUI icons case-insensitively", () => {
   });
 
   expect(uppercaseResult.type).toBe(lowercaseResult.type);
+});
+
+test("span icon renderer resolves mixed-case InstUI names", () => {
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: true,
+    enableSimpleIcons: false,
+    simpleIconColor: undefined,
+  });
+
+  const explicitNameResult = Span({
+    className: "icon-token",
+    children: ":CreativeCommonsInstUIIcon:",
+    "data-icon": "CreativeCommonsInstUIIcon",
+  });
+
+  const shorthandNameResult = Span({
+    className: "icon-token",
+    children: ":CreativeCommons:",
+    "data-icon": "CreativeCommons",
+  });
+
+  expect(shorthandNameResult.type).toBe(explicitNameResult.type);
+});
+
+test("span simple icon resolver receives normalized slug candidates", () => {
+  const seenCodes: string[] = [];
+  const Span = createSpanComponent({
+    showColorCodes: false,
+    showIcons: true,
+    iconColor: undefined,
+    enableInstuiIcons: false,
+    enableSimpleIcons: true,
+    simpleIconColor: undefined,
+    resolveSimpleIcon: (code) => {
+      seenCodes.push(code);
+      return code === "creative-commons"
+        ? { path: "M1 1h22v22H1z", title: "Creative Commons" }
+        : undefined;
+    },
+  });
+
+  const rendered = Span({
+    className: "icon-token",
+    children: ":CreativeCommons:",
+    "data-icon": "CreativeCommons",
+  }) as { type: unknown };
+
+  expect(rendered.type).toBe("span");
+  expect(seenCodes).toContain("creative-commons");
+});
+
+test("createInstuiMarkdownComponents auto-registers simple-icons resolver", () => {
+  const components = createInstuiMarkdownComponents({
+    icons: {
+      enabled: true,
+      providers: {
+        instui: false,
+        simpleIcons: true,
+      },
+      simpleIcons: {},
+    },
+  });
+
+  const span = components.span as (props: Record<string, unknown>) => {
+    type: unknown;
+    props: Record<string, unknown>;
+  };
+
+  const rendered = span({
+    className: "icon-token",
+    children: ":Claude:",
+    "data-icon": "Claude",
+  });
+
+  expect(rendered.type).toBe("span");
+  const inlineSvg = rendered.props.children as { type: unknown; props: Record<string, unknown> };
+  expect(inlineSvg.type).toBe(InlineSVG);
+  expect(inlineSvg.props["aria-label"]).toBe("Claude");
+});
+
+test("exported simple-icons resolver resolves plain and si-prefixed tokens", () => {
+  const claude = resolveSimpleIconToken("Claude");
+  const prefixed = resolveSimpleIconToken("siMcdonalds");
+
+  expect(claude?.title).toBe("Claude");
+  expect(prefixed?.title).toBe("McDonald's");
+
+  const customResolver = createSimpleIconsResolver({
+    siCustomIcon: {
+      slug: "customicon",
+      title: "Custom Icon",
+      path: "M1 1h22v22H1z",
+    },
+  });
+
+  expect(customResolver("custom-icon")?.title).toBe("Custom Icon");
 });

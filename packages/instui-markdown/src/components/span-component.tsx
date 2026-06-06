@@ -17,8 +17,21 @@ interface SpanComponentOptions {
   resolveSimpleIcon?: (code: string) => SimpleIconTokenData | undefined;
 }
 
-function toPascalCase(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+const INSTUI_ICON_LOOKUP = new Map<string, unknown>(
+  Object.entries(InstUIIcons).map(([name, value]) => [name.toLowerCase(), value]),
+);
+
+function findInstUIIcon(candidates: string[]): React.ComponentType<InstUIIconProps> | undefined {
+  for (const candidate of candidates) {
+    const IconComponent = INSTUI_ICON_LOOKUP.get(candidate.toLowerCase()) as
+      | React.ComponentType<InstUIIconProps>
+      | undefined;
+    if (IconComponent) {
+      return IconComponent;
+    }
+  }
+
+  return undefined;
 }
 
 function parseIconTokenName(iconName: string) {
@@ -44,10 +57,17 @@ function parseIconTokenName(iconName: string) {
 }
 
 function getSimpleIconCodes(iconName: string, root: string, withoutPrefix: string): string[] {
+  const rootWords = root
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean);
+  const lowerWords = rootWords.map((word) => word.toLowerCase());
+  const compact = lowerWords.join("");
+  const kebab = lowerWords.join("-");
   const camel = root.charAt(0).toLowerCase() + root.slice(1);
   const lower = root.toLowerCase();
 
-  return Array.from(new Set([iconName, withoutPrefix, root, camel, lower]));
+  return Array.from(new Set([iconName, withoutPrefix, root, camel, lower, compact, kebab]));
 }
 
 export function createSpanComponent(options: SpanComponentOptions) {
@@ -69,20 +89,13 @@ export function createSpanComponent(options: SpanComponentOptions) {
         const { withoutPrefix, isSolid, isInstUI, root } = parseIconTokenName(iconName);
 
         if (options.enableInstuiIcons) {
-          const normalizedRoot = toPascalCase(root);
           const candidates = isSolid
-            ? [`Icon${normalizedRoot}Solid`]
+            ? [`Icon${root}Solid`]
             : isInstUI
-              ? [`${normalizedRoot}InstUIIcon`]
-              : [
-                  `${normalizedRoot}InstUIIcon`,
-                  `Icon${normalizedRoot}Line`,
-                  `Icon${normalizedRoot}`,
-                ];
+              ? [`${root}InstUIIcon`]
+              : [`${root}InstUIIcon`, `Icon${root}Line`, `Icon${root}`];
 
-          const IconComponent = candidates
-            .map((name) => (InstUIIcons as Record<string, unknown>)[name])
-            .find(Boolean) as React.ComponentType<InstUIIconProps> | undefined;
+          const IconComponent = findInstUIIcon(candidates);
 
           if (IconComponent) {
             const resolvedColor = inlineIconColor ?? options.iconColor;
@@ -135,14 +148,21 @@ export function createSpanComponent(options: SpanComponentOptions) {
                 : undefined;
 
             const label = simpleIcon.title ?? root;
+            const simpleIconStyle: React.CSSProperties = {
+              display: "inline-flex",
+              alignItems: "center",
+              verticalAlign: "middle",
+              lineHeight: 1,
+              ...(normalizedIconColor ? { color: normalizedIconColor } : {}),
+            };
 
             return (
-              <span style={normalizedIconColor ? { color: normalizedIconColor } : undefined}>
+              <span style={simpleIconStyle}>
                 <InlineSVG
-                  inline={false}
+                  inline
                   viewBox={simpleIcon.viewBox ?? "0 0 24 24"}
-                  width={simpleIcon.width ?? "1em"}
-                  height={simpleIcon.height ?? "1em"}
+                  width={simpleIcon.width ?? "1.125em"}
+                  height={simpleIcon.height ?? "1.125em"}
                   role="img"
                   aria-label={label}
                 >

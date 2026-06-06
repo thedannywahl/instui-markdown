@@ -58,6 +58,7 @@
     "rehype-autolink-headings": "*",
     "rehype-raw": "*",
     "rehype-slug": "*",
-    "remark-gfm": "*"
+    "remark-gfm": "*",
+    "simple-icons": "*"
   }
 }

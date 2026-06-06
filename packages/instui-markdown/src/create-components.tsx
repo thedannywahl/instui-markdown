@@ -1,5 +1,6 @@
 import type { Components } from "react-markdown";
 import type { InstuiMarkdownRenderOptions } from "./types.ts";
+import { resolveSimpleIconToken } from "./simple-icons-resolver.ts";
 import {
   createPComponent,
   createEmComponent,
@@ -61,7 +62,7 @@ export function createInstuiMarkdownComponents(
   const enableInstuiIcons = renderOptions.icons?.providers?.instui ?? true;
   const enableSimpleIcons = renderOptions.icons?.providers?.simpleIcons ?? true;
   const simpleIconColor = renderOptions.icons?.simpleIcons?.color;
-  const resolveSimpleIcon = renderOptions.icons?.simpleIcons?.resolve;
+  const resolveSimpleIcon = renderOptions.icons?.simpleIcons?.resolve ?? resolveSimpleIconToken;
 
   return {
     span: createSpanComponent({

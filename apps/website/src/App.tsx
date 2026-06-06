@@ -56,6 +56,7 @@ export function App({ instuiTheme, resolvedTheme, onToggleTheme }: AppProps) {
     icons: {
       enabled: true,
       color: undefined,
+      simpleIcons: {},
     },
   });
 

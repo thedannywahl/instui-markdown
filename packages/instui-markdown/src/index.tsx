@@ -13,6 +13,12 @@ import type { ReactNode } from "react";
 import { createInstuiMarkdownComponents } from "./create-components.tsx";
 import { normalizeSvgElements } from "./helpers.tsx";
 import type { InstuiMarkdownProps, InstuiMarkdownRenderOptions } from "./types.ts";
+export {
+  createSimpleIconsResolver,
+  resolveSimpleIconToken,
+  type SimpleIconResolver,
+  type SimpleIconsRegistry,
+} from "./simple-icons-resolver.ts";
 
 export type { InstuiMarkdownProps, InstuiMarkdownRenderOptions } from "./types.ts";
 export { createInstuiMarkdownComponents, instuiMarkdownComponents } from "./create-components.tsx";

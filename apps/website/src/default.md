@@ -26,8 +26,9 @@ Add a hex color code after the Icon name to see it in any color
 
 [Simple Icons](https://simpleicons.org) are also available and follow the same pattern. When icons have the same name between INSTUI and Simple Icons, the INSTUI icon will be displayed.
 
-- `:Claude|#D97757:`
-- `:mcdonalds|#FBC817:`
+- `:Claude|#D97757:` :ArrowBigRight: :Claude|#D97757:
+- `:mcdonalds|#FBC817:` :ArrowBigRight: :mcdonalds|#FBC817:
+- `:siClaude:` :ArrowBigRight: :siClaude:
 
 ## Color literals
 
